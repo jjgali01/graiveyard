@@ -20,12 +20,15 @@ if (process.env.DATABASE_URL) {
       id TEXT PRIMARY KEY,
       text TEXT NOT NULL,
       image TEXT,
+      image_data TEXT,
       flowers INTEGER DEFAULT 0,
       created_at TIMESTAMPTZ DEFAULT NOW(),
       x REAL,
       y REAL
     )
-  `).catch(err => console.error('DB init error:', err));
+  `).then(() =>
+    db.query(`ALTER TABLE memorials ADD COLUMN IF NOT EXISTS image_data TEXT`)
+  ).catch(err => console.error('DB init error:', err));
 }
 
 // --- File-based fallback (local development) ---
@@ -45,11 +48,16 @@ function writeMemorialsFile(data) {
   fs.writeFileSync(dataFile, JSON.stringify(data, null, 2));
 }
 
+const imageMimeTypes = {
+  '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
+  '.png': 'image/png', '.gif': 'image/gif', '.webp': 'image/webp'
+};
+
 function rowToMemorial(row) {
   return {
     id: row.id,
     text: row.text,
-    image: row.image,
+    image: row.image_data || row.image,
     flowers: row.flowers,
     createdAt: row.created_at,
     x: row.x,
@@ -101,10 +109,19 @@ app.post('/api/memorials', upload.single('image'), async (req, res) => {
     return res.status(400).json({ error: 'Text is required' });
   }
 
+  let imageData = null;
+  if (req.file && db) {
+    const ext = path.extname(req.file.originalname).toLowerCase();
+    const mime = imageMimeTypes[ext] || 'image/jpeg';
+    const buf = fs.readFileSync(req.file.path);
+    imageData = `data:${mime};base64,${buf.toString('base64')}`;
+    fs.unlinkSync(req.file.path);
+  }
+
   const memorial = {
     id: uuidv4(),
     text: text.trim().slice(0, 300),
-    image: req.file ? `/uploads/${req.file.filename}` : null,
+    image: req.file && !db ? `/uploads/${req.file.filename}` : (imageData ? imageData : null),
     flowers: 0,
     createdAt: new Date().toISOString(),
     x: Math.random() * 80 + 5,  // random % position 5-85%
@@ -114,8 +131,8 @@ app.post('/api/memorials', upload.single('image'), async (req, res) => {
   try {
     if (db) {
       await db.query(
-        'INSERT INTO memorials (id, text, image, flowers, created_at, x, y) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-        [memorial.id, memorial.text, memorial.image, memorial.flowers, memorial.createdAt, memorial.x, memorial.y]
+        'INSERT INTO memorials (id, text, image, image_data, flowers, created_at, x, y) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+        [memorial.id, memorial.text, null, imageData, memorial.flowers, memorial.createdAt, memorial.x, memorial.y]
       );
       return res.json(memorial);
     }
