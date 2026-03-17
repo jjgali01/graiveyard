@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Graiveyard</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="sky">
+    <div class="moon"></div>
+    <div id="stars"></div>
+    <div id="sun"></div>
+    <div id="clouds"></div>
+  </div>
+
+  <header>
+    <h1 class="title">THE GRAIVEYARD</h1>
+    <p class="subtitle">grieving the bygone days of work</p>
+    <a href="submit.html" class="pixel-btn">LAY SOMETHING TO REST</a>
+  </header>
+
+  <div id="graveyard">
+    <button id="scroll-left" class="scroll-btn scroll-btn-left" aria-label="Scroll left">←</button>
+    <button id="scroll-right" class="scroll-btn scroll-btn-right" aria-label="Scroll right">→</button>
+    <div id="ground"></div>
+    <div id="groundskeeper" class="groundskeeper" aria-hidden="true" role="button" tabindex="-1" title="Click to talk">
+      <div class="groundskeeper-speech hidden" id="groundskeeper-speech"></div>
+      <div class="groundskeeper-sprite">
+        <div class="gk-person">
+          <span class="gk-hat"></span>
+          <span class="gk-head"></span>
+          <span class="gk-body"></span>
+          <span class="gk-legs"></span>
+        </div>
+        <div class="gk-lawnmower">
+          <span class="gk-mower-handle"></span>
+          <span class="gk-mower-body"></span>
+          <span class="gk-mower-motor"></span>
+          <span class="gk-mower-wheel gk-wheel-l"></span>
+          <span class="gk-mower-wheel gk-wheel-r"></span>
+        </div>
+      </div>
+    </div>
+    <div id="memorials-container"></div>
+  </div>
+
+  <!-- Gravestone modal -->
+  <div id="modal-overlay" class="hidden">
+    <div id="modal">
+      <button id="modal-close" class="pixel-btn small">✕ CLOSE</button>
+      <div id="modal-content"></div>
+      <button id="lay-flowers-btn" class="pixel-btn flower-btn">🌸 LAY FLOWERS</button>
+      <p id="flower-count"></p>
+    </div>
+  </div>
+
+  <div id="flower-animation"></div>
+
+  <button id="theme-toggle" class="pixel-btn small theme-toggle-fixed" title="Toggle day/night">☀️ / 🌙</button>
+
+  <script src="script.js"></script>
+  <script src="theme.js"></script>
+</body>
+</html>

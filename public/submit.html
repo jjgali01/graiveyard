@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add a Memorial – The Graiveyard</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="sky">
+    <div class="moon"></div>
+    <div id="stars"></div>
+    <div id="sun"></div>
+    <div id="clouds"></div>
+  </div>
+
+  <div id="submit-page">
+    <div id="submit-box">
+      <a href="/" class="pixel-btn small back-btn">← BACK</a>
+      <h2 class="form-title">LAY SOMETHING TO REST</h2>
+      <p class="form-subtitle">Miss something about your craft that AI does now? Let's give it a proper burial.</p>
+
+      <form id="memorial-form" enctype="multipart/form-data">
+        <div class="field">
+          <label for="text">WHAT ARE YOU GRIEVING?</label>
+          <textarea
+            id="text"
+            name="text"
+            maxlength="300"
+            rows="5"
+            placeholder="Drawing wireframes, hand-typing code, proofreading docs, etc."
+            required
+          ></textarea>
+          <span class="char-count"><span id="chars">0</span>/300</span>
+        </div>
+
+        <div class="field">
+          <label for="image">UPLOAD AN IMAGE (optional)</label>
+          <div id="image-drop-area">
+            <input type="file" id="image" name="image" accept="image/*">
+            <div id="image-preview-wrap">
+              <div id="drop-hint">📁 CLICK TO CHOOSE<br><span>or drag & drop</span><br><small>JPG, PNG, GIF · max 5MB</small></div>
+              <img id="image-preview" src="" alt="" class="hidden">
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="pixel-btn submit-btn" id="submit-btn">
+          GRIEVE IT
+        </button>
+      </form>
+
+      <div id="success-msg" class="hidden">
+        <div class="gravestone-preview-wrap">
+          <p class="rip-text">R.I.P.</p>
+          <p id="success-epitaph"></p>
+        </div>
+        <p class="success-note">Your memorial has been placed in the graveyard.</p>
+        <a href="/" class="pixel-btn">VIEW THE GRAVEYARD</a>
+      </div>
+    </div>
+  </div>
+
+  <button id="theme-toggle" class="pixel-btn small theme-toggle-fixed" title="Toggle day/night">☀️ / 🌙</button>
+
+  <script src="submit.js"></script>
+  <script src="theme.js"></script>
+</body>
+</html>
